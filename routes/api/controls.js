@@ -47,7 +47,7 @@ client.on('connect', function() { // When connected
   
   }
 
-connectToDB();
+//connectToDB();
 const router = express.Router()
 
 function write(){
@@ -76,8 +76,9 @@ function write(){
 
 router.get("/", (req, res) => {
 
-  write();
-
+  //write();
+  
+  res.status(200).send(req.query.node);
 });
 
 router.post("/",(req, res) => {

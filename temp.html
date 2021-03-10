@@ -1,0 +1,182 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet"
+			href= 
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" /> 
+
+		<!-- jQuery library -->
+		<script src= 
+"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> 
+	</script> 
+
+		<!-- Popper JS -->
+		<script src= 
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"> 
+	</script> 
+
+		<!-- Latest compiled JavaScript -->
+		<script src= 
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"> 
+	</script> 
+
+		<meta name="viewport"
+			content="width=device-width, 
+					initial-scale=1" /> 
+
+		<link rel="stylesheet"
+			type="text/css"
+			href="style.css" /> 
+
+		<link href= 
+"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+			rel="stylesheet" /> 
+
+		<link href= 
+"https://fonts.googleapis.com/css2?family=Lato:ital, wght@0, 100;0, 300;0, 400;1, 300&display=swap"
+			rel="stylesheet" /> 
+		<script src= 
+"https://cdn.jsdelivr.net/npm/gijgo@1.8.1/combined/js/gijgo.min.js"
+				type="text/javascript"></script> 
+		<link href= 
+"https://cdn.jsdelivr.net/npm/gijgo@1.8.1/combined/css/gijgo.min.js"
+			rel="stylesheet"
+			type="text/css" /> 
+		<link rel="stylesheet"
+			type="text/css"
+			href="css/lightbox.min.css" /> 
+		<script type="text/javascript"
+				src="js/lightbox-plus-jquery.min.js"> 
+	</script> 
+
+	</head> 
+
+	<body> 
+		<div class="toggle"> 
+			<div class="custom-control custom-switch"> 
+				<input type="checkbox"
+					class="custom-control-input"
+					id="toggleSwitches1" 
+                    onchange="toggleS1()"
+                    checked/> 
+				<label class="custom-control-label"
+					for="toggleSwitches1"> 
+				TOGGLE 1
+			    </label> 
+			</div>
+		</div>
+        
+        <div class="toggle"> 
+			<div class="custom-control custom-switch"> 
+				<input type="checkbox"
+					class="custom-control-input"
+					id="toggleSwitches2" 
+                    onchange="toggleS2()"
+                    checked/> 
+				<label class="custom-control-label"
+					for="toggleSwitches2"> 
+				TOGGLE 2
+			    </label> 
+			</div>
+		</div>
+
+        <div class="toggle"> 
+			<div class="custom-control custom-switch"> 
+				<input type="checkbox"
+					class="custom-control-input"
+					id="toggleSwitches3" 
+                    onchange="toggleS3()"
+                    checked/> 
+				<label class="custom-control-label"
+					for="toggleSwitches3"> 
+				TOGGLE 3
+			    </label> 
+			</div>
+		</div>
+
+
+        <div class="toggle"> 
+			<div class="custom-control custom-switch"> 
+				<input type="checkbox"
+					class="custom-control-input"
+					id="toggleSwitches4" 
+                    onchange="toggleS4()"
+                    checked/> 
+				<label class="custom-control-label"
+					for="toggleSwitches4"> 
+				TOGGLE 4
+			    </label> 
+			</div>
+		</div>
+
+        Sensor 1 val:<div id="Sensor1val"></div>
+        <br>
+        Sensor 2 val:<div id="Sensor2val"></div>
+        
+	</body> 
+    <script>
+        function sendRequest(gateway,node,action){
+            const Http = new XMLHttpRequest();
+            const url='http://localhost:4002/api/controls/?gateway='+gateway+'&node='+node+'&action='+action;
+            console.log(url);
+            Http.open("GET", url);
+            Http.send();
+
+            Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+            }
+        }
+        function toggleS1(){
+            var btn=document.getElementById("toggleSwitches1");
+           
+            if(!btn.hasAttribute('checked'))
+                btn.setAttribute('checked','');
+            else
+                btn.removeAttribute('checked')
+            
+
+            console.log("S1:"+btn.hasAttribute('checked'));
+
+            sendRequest("g1","n1","ON")
+
+        }
+
+        function toggleS2(){
+            var btn=document.getElementById("toggleSwitches2");
+           
+            if(!btn.hasAttribute('checked'))
+                btn.setAttribute('checked','');
+            else
+                btn.removeAttribute('checked')
+            
+                console.log("S2:"+btn.hasAttribute('checked'));
+            sendRequest("g1","n2","ON")
+        }
+
+        function toggleS3(){
+            var btn=document.getElementById("toggleSwitches3");
+           
+            if(!btn.hasAttribute('checked'))
+                btn.setAttribute('checked','');
+            else
+                btn.removeAttribute('checked')
+            
+                console.log("S3:"+btn.hasAttribute('checked'));
+                sendRequest("g1","n3","ON")
+        }
+
+        function toggleS4(){
+            var btn=document.getElementById("toggleSwitches4");
+           
+            if(!btn.hasAttribute('checked'))
+                btn.setAttribute('checked','');
+            else
+                btn.removeAttribute('checked')
+            
+                console.log("S4:"+btn.hasAttribute('checked'));
+                sendRequest("g1","n4","ON")
+        }
+
+    </script>
+</html> 
