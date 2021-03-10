@@ -110,12 +110,31 @@
 			</div>
 		</div>
 
-        Sensor 1 val:<div id="Sensor1val"></div>
+        Sensor 1 val:<div id="nodeIDs1"></div>
         <br>
-        Sensor 2 val:<div id="Sensor2val"></div>
+        Sensor 2 val:<div id="nodeIDs2"></div>
         
 	</body> 
     <script>
+
+		function readUpdate(){
+			const http = new XMLHttpRequest();
+            const url='http://localhost:4002/api/controls/read?gateway='+gateway+'&node='+node+'&action='+action;
+            console.log(url);
+            http.open("GET", url);
+            http.send();
+
+            http.onreadystatechange = (e) => {
+					let response = http.responseText;
+					document.getElementById(nodeID).textContent=response.body.value;
+				}
+		
+
+    		setTimeout(readUpdate, 5000);
+		}
+
+		readUpdate();
+
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
             const url='http://localhost:4002/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
