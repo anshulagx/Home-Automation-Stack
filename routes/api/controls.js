@@ -29,7 +29,7 @@ function mqttPub(topic, msg){
       client.publish(topic, msg, function() {
         console.log(topic+" : "+msg+" Published");
         client.end();
-        return res.status(200).send("Sucess");
+        return;
       });
   });
 }
@@ -79,43 +79,46 @@ function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
 
   var state = new StatesModel(data);
 
-  state.save(function(err, obj) {
-    console.log("av");
-    if (err) {
-      console.log("Failed");
-      return res.status(500).send(err);
-    }
-    console.log("Added");
-    return res.status(200).send(obj);
+  // state.save(function(err, obj) {
+  //   if (err) {
+  //     console.log("Failed");
+  //     return 
+  //   }
+  //   console.log("Added");
+  //   return 
+  // });
+  StatesModel.updateOne({gatewayID: gatewayID,nodeID:nodeID}, data, {upsert: true},()=>{
+    console.log("Write success");
   });
 }
 
 router.get("/publish", (req, res) => {
-
-  //write();
-  
-  console.log("Initiating Message Publish")
-  mqttPub(req.body.gateway,req.body.node+"/"+req.body.action)
-  mongoWrite(req.body.gateway,req.body.node,req.body.action);
-
+ 
+  console.log("Initiating Message Publish");
+  mqttPub(req.query.gateway,req.query.node+"/"+req.query.action)
+  mongoWrite(req.query.gateway,req.query.node,req.query.action);
+  res.status(200).send("Success");
 });
 
 router.get("/read", (req,res) => {
-  // gatewayID, nodeID, value
-  
+  // gatewayID, nodeID
+
+  var gatewayId=req.query.gatewayId;
+  var nodeId=req.query.nodeId;
+  console.log("Searching");
+  StatesModel
+  .find({
+    gatewayID: gatewayId,
+    nodeID:nodeId
+  })
+  .exec((err, entry) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err)
+    }
+    return res.status(200).send(entry);
+  });
 });
 
-router.post("/",(req, res) => {
-
-  // change to post with json
-  // {
-  //   "gateway":2,
-  //   "id":4,
-  //   "action":"on",
-  //   "extras":"adfs",
-  //   "value":20
-  // }
-
-});
 
 module.exports = router
