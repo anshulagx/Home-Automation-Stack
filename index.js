@@ -1,6 +1,6 @@
 const express = require('express')
 
-const profile = require('./routes/api/profile')
+const profile = require('./routes/api/controls')
 
 
 const bodyParser = require('body-parser');
@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/control", profile)
+app.use("/api/controls", profile)
 
 //For all unmatched routes
 app.use((req, res) => {
