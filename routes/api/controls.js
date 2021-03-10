@@ -22,6 +22,17 @@ var options = {
   encoding: 'utf8'
 };
 
+function mqttPub(topic, msg){
+  var client  = mqtt.connect('mqtt://65.1.164.121',options)
+    client.on('connect', function() {
+      console.log('connected');
+      client.publish(topic, msg, function() {
+        console.log(topic+" : "+msg+" Published");
+        client.end();
+        return res.status(200).send("Sucess");
+      });
+  });
+}
 
 var client = mqtt.connect('mqtt://65.1.164.121', options);
 client.on('connect', function() { // When connected
@@ -47,18 +58,18 @@ client.on('connect', function() { // When connected
   
   }
 
-//connectToDB();
+connectToDB();
 const router = express.Router()
 
-function write(){
+function mongoWrite(gatewayID, nodeID, userID, action, value=0, extras=""){
    //send html webpage
    let data={
     "gatewayID":"62",
-   "nodeID":"65",
-     "userID":"akjsuhb",
-      "value":52,
-       "action":6,
-        "extras":"" 
+    "nodeID":"65",
+    "userID":"akjsuhb",
+    "value":52,
+    "action":6,
+    "extras":"" 
   };
 
   var state = new StatesModel(data);
@@ -74,15 +85,19 @@ function write(){
   });
 }
 
-router.get("/", (req, res) => {
+router.get("/publish", (req, res) => {
 
   //write();
   
-  res.status(200).send(req.query.node);
+  console.log("Initiating Message Publish")
+  mqttPub(req.body.gateway,req.body.node+"/"+req.body.action)
+  mongoWrite(req.body.gateway,req.body.node,req.body.user,req.body.action);
+
 });
 
 router.post("/",(req, res) => {
 
+  // change to post with json
   // {
   //   "gateway":2,
   //   "id":4,
@@ -90,29 +105,7 @@ router.post("/",(req, res) => {
   //   "extras":"adfs",
   //   "value":20
   // }
-  console.log(req.body);
-  if(req.body.id == 1){
-    console.log("reached");
-    var client  = mqtt.connect('mqtt://65.1.164.121',options)
-    client.on('connect', function() {
-      console.log('connected');
-      client.publish('testnode/action', 'switchON', function() {
-        console.log("ON Request Sent");
-        client.end();
-      });
-    });
-  }
-  //req.body.id 
-
-  //
-
-
-  res.status(200).send("Hello");
 
 });
-
-
-
-
 
 module.exports = router

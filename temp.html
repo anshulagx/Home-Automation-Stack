@@ -118,7 +118,7 @@
     <script>
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
-            const url='http://localhost:4002/api/controls/?gateway='+gateway+'&node='+node+'&action='+action;
+            const url='http://localhost:4002/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action+'&user=username';
             console.log(url);
             Http.open("GET", url);
             Http.send();
@@ -134,7 +134,7 @@
                 btn.setAttribute('checked','');
             else
                 btn.removeAttribute('checked')
-            
+
 
             console.log("S1:"+btn.hasAttribute('checked'));
 
