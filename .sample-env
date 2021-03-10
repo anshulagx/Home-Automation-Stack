@@ -1,0 +1,6 @@
+JWT_SECRET=""
+PORT=8080
+
+DB_URL="mongodb+srv://[?]:[?]]@cluster0.cpm6d.mongodb.net/database0?retryWrites=true&w=majority"
+DB_USERNAME=""
+DB_PASSWORD=""
