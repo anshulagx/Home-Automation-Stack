@@ -42,15 +42,18 @@ client.on('connect', function() {
         // when a message arrives, do something with it
         client.on('message', function(topic, message, packet) {
             console.log("Received '" + message + "' on '" + topic + "'");
-            let parse = message.split("/");
+            console.log(typeof(message));
+            let parse = message.toString().split("/");
             let nodeID = parse[0],action = parse[1],value=parse[2],extras=parse[3];
             mongoWrite(gatewayID, nodeID, action, value);
         });
     });
   });
 }
-
-mqttSub("gateway1");
+//TODO: MAKE IT VARIABLE
+mqttSub("2111");
+mqttSub("2011");
+mqttSub("2001");
 
   function connectToDB() {
     //Set up mongoose connection

@@ -119,14 +119,15 @@
 
 		function readUpdate(){
 			const http = new XMLHttpRequest();
-            const url='http://localhost:4002/api/controls/read?gateway='+gateway+'&node='+node+'&action='+action;
+            const url='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=12g';
             console.log(url);
             http.open("GET", url);
             http.send();
 
             http.onreadystatechange = (e) => {
-					let response = http.responseText;
-					document.getElementById(nodeID).textContent=response.body.value;
+					let response = JSON.parse(http.responseText);
+					console.log(response.value);
+					document.getElementById("nodeIDs2").innerHTML=response.value;
 				}
 		
 
