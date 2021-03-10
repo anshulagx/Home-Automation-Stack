@@ -1,7 +1,13 @@
-//TODO: auth
-
+var mongoose = require('mongoose');
 const express = require("express")
 var mqtt = require('mqtt')
+require('dotenv').config()
+
+
+//var UserModel = require('../../models/alarms.js')
+var StatesModel = require('../../models/states.js')
+
+
 var options = {
   port: 1883,
   host: 'mqtt://65.1.164.121',
@@ -15,6 +21,8 @@ var options = {
   clean: true,
   encoding: 'utf8'
 };
+
+
 var client = mqtt.connect('mqtt://65.1.164.121', options);
 client.on('connect', function() { // When connected
     console.log('connected');
@@ -26,13 +34,50 @@ client.on('connect', function() { // When connected
         });
     });
   });
+
+  function connectToDB() {
+    //Set up mongoose connection
+    var mongoDB = process.env.DB_URL;
+    mongoose.connect(mongoDB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+  
+  }
+
+connectToDB();
 const router = express.Router()
 
+function write(){
+   //send html webpage
+   let data={
+    "gatewayID":"62",
+   "nodeID":"65",
+     "userID":"akjsuhb",
+      "value":52,
+       "action":6,
+        "extras":"" 
+  };
+
+  var state = new StatesModel(data);
+
+  state.save(function(err, obj) {
+    console.log("av");
+    if (err) {
+      console.log("Failed");
+      return res.status(500).send(err);
+    }
+    console.log("Added");
+    return res.status(200).send(obj);
+  });
+}
 
 router.get("/", (req, res) => {
 
-  //send html webpage
-  
+  write();
+
 });
 
 router.post("/",(req, res) => {
