@@ -79,14 +79,6 @@ function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
 
   var state = new StatesModel(data);
 
-  // state.save(function(err, obj) {
-  //   if (err) {
-  //     console.log("Failed");
-  //     return 
-  //   }
-  //   console.log("Added");
-  //   return 
-  // });
   StatesModel.updateOne({gatewayID: gatewayID,nodeID:nodeID}, data, {upsert: true},()=>{
     console.log("Write success");
   });
