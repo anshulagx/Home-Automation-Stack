@@ -118,7 +118,7 @@
     <script>
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
-            const url='http://localhost:4002/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action+'&user=username';
+            const url='http://localhost:4002/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
             console.log(url);
             Http.open("GET", url);
             Http.send();

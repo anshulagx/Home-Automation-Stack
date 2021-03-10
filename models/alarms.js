@@ -13,14 +13,11 @@ var alarmsSchema = new Schema(
     "alarmTime": {
       "type": "String"
     },
-    "userID": {
-      "type": "String"
-    },
     "value": {
       "type": "Number"
     },
     "action": {
-      "type": "Number"
+      "type": "String"
     },
     "extras": {
       "type": "String"

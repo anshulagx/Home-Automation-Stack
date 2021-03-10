@@ -34,17 +34,23 @@ function mqttPub(topic, msg){
   });
 }
 
-var client = mqtt.connect('mqtt://65.1.164.121', options);
-client.on('connect', function() { // When connected
+function mqttSub(gatewayID){
+  var client = mqtt.connect('mqtt://65.1.164.121', options);
+client.on('connect', function() {
     console.log('connected');
-    // subscribe to a topic
-    client.subscribe('testnode/publish', function() {
+    client.subscribe(gatewayID, function() {
         // when a message arrives, do something with it
         client.on('message', function(topic, message, packet) {
             console.log("Received '" + message + "' on '" + topic + "'");
+            let parse = message.split("/");
+            let nodeID = parse[0],action = parse[1],value=parse[2],extras=parse[3];
+            mongoWrite(gatewayID, nodeID, action, value);
         });
     });
   });
+}
+
+mqttSub("gateway1");
 
   function connectToDB() {
     //Set up mongoose connection
@@ -61,15 +67,14 @@ client.on('connect', function() { // When connected
 connectToDB();
 const router = express.Router()
 
-function mongoWrite(gatewayID, nodeID, userID, action, value=0, extras=""){
+function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
    //send html webpage
    let data={
-    "gatewayID":"62",
-    "nodeID":"65",
-    "userID":"akjsuhb",
-    "value":52,
-    "action":6,
-    "extras":"" 
+    "gatewayID":gatewayID,
+    "nodeID":nodeID,
+    "value":value,
+    "action":action,
+    "extras":extras
   };
 
   var state = new StatesModel(data);
@@ -91,8 +96,13 @@ router.get("/publish", (req, res) => {
   
   console.log("Initiating Message Publish")
   mqttPub(req.body.gateway,req.body.node+"/"+req.body.action)
-  mongoWrite(req.body.gateway,req.body.node,req.body.user,req.body.action);
+  mongoWrite(req.body.gateway,req.body.node,req.body.action);
 
+});
+
+router.get("/read", (req,res) => {
+  // gatewayID, nodeID, value
+  
 });
 
 router.post("/",(req, res) => {

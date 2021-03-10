@@ -14,14 +14,11 @@ var statesSchema = new Schema(
       "type": "Date",
       "default": new Date()
     },
-    "userID": {
-      "type": "String"
-    },
     "value": {
       "type": "Number"
     },
     "action": {
-      "type": "Number"
+      "type": "String"
     },
     "extras": {
       "type": "String"
