@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SpeechKITT/1.0.0/speechkitt.min.js"></script>
 </head>
 
 <body>
@@ -35,6 +37,7 @@
     <div class="content">
         <div class="cards">
             <div class="card boxcard">
+                <h2 class="currTime">Current Time: <span id="timeMe"></span></h2>
             <div class="card lights">
                 <h4><i class="fas fa-thermometer-half"></i>LIGHTS</h4>
                 <p><label class="switch">
@@ -106,6 +109,12 @@
         </div>
     </div>
     <script>
+        function setDate(){
+            var date = new Date();
+            document.getElementById("timeMe").innerHTML = date.toString().slice(0,24);
+            setTimeout(setDate,1000);
+        }
+        setDate();
         function readUpdate(){
 			const http = new XMLHttpRequest();
             const http1 = new XMLHttpRequest();
@@ -232,6 +241,37 @@
             console.log(Http.responseText)
             }
         }
+
+        function speechRec(){
+        if (annyang) {
+            annyang.addCommands({
+                'Switch on the light': function() {
+                    if(document.getElementById("12g").textContent=="OFF")
+                        document.getElementById("toggleSwitches1").click();
+                },
+                'Switch on the fan': function() {
+                    if(document.getElementById("12u").textContent=="OFF")
+                        document.getElementById("toggleSwitches2").click();
+                },
+                'Switch off the light': function() {
+                    if(document.getElementById("12g").textContent=="ON")
+                        document.getElementById("toggleSwitches1").click();
+                },
+                'Switch off the fan': function() {
+                    if(document.getElementById("12u").textContent=="ON")
+                        document.getElementById("toggleSwitches2").click();
+                }
+            });
+            SpeechKITT.annyang();
+            
+            SpeechKITT.setStylesheet('https://cdnjs.cloudflare.com/ajax/libs/SpeechKITT/1.0.0/themes/flat.css');
+                    
+            SpeechKITT.setInstructionsText("Say the Command!");
+            
+            SpeechKITT.vroom();
+        }
+    }
+    speechRec()
     </script>
 </body>
 

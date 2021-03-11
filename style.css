@@ -297,6 +297,12 @@
   
   .modal-body {padding: 2px 16px;}
   
+  .currTime{
+      margin-top:40px;
+      font-size: 1.2rem;
+      font-family: 'Montserrat Bold' sans-serif;
+  }
+
   .modal-footer {
     padding: 2px 16px;
     background-color: #5cb85c;
