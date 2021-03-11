@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+        html {
+            font-family: Arial;
+            display: inline-block;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-image: linear-gradient(to right, #56ab2f, #a8e063);
+            box-shadow: 1px 1px 20px 1px #888888;
+            padding-left: 50px;
+            color: white;
+        }
+        
+        .dashead{
+            font-size: 1.4rem;
+            text-align: left;
+            display: inline;
+            float: left;
+        }
+
+        .username{
+            text-align: right;
+            display: block;
+            float: right;
+            font-size: 1.4rem;
+            padding: 30px 20px 0px 0px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 25px;
+            box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+        }
+
+        .cards {
+            max-width: 700px;
+            margin: 0 auto;
+            display: grid;
+            grid-gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .reading {
+            font-size: 2.8rem;
+        }
+
+        .packet {
+            color: #bebebe;
+        }
+        .card.temperature {
+            margin: 50px 4px 0px 10px;
+            color: #fd7e14;
+            width: 40%;
+            display:inline-block;
+        }
+
+        .card.humidity {
+            margin: 50px 40px 0px 10px;
+            color: #1b78e2;
+            width: 40%;
+            display:inline-block;
+        }
+        .card.fan {
+            margin: 50px 40px 0px 10px;
+            color: #fd7e14;
+            width: 40%;
+            display:inline-block;
+        }
+
+        .card.lights {
+            margin: 50px 4px 0px 10px;
+            color: #1b78e2;
+            width: 40%;
+            display:inline-block;
+        }
+        
+        .card.alarm {
+            margin: 30px 40px 30px 10px;
+            color: #1b78e2;
+            width: 80%;
+            display:inline-block;
+            cursor: pointer;
+        }
+        .half-circle {
+    width: 200px;
+    height: 50px;
+    background-color: white;
+    border-bottom-left-radius: 70px;
+    border-bottom-right-radius: 70px;
+    border: 10px solid white;
+    border-top: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin:auto;
+    padding-top:5px;
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+
+}
+* {
+    box-sizing: border-box;
+  }
+.select {
+    position: relative;
+    min-width: 100px;
+  }
+  .select svg {
+    position: absolute;
+    right: 12px;
+    top: calc(50% - 3px);
+    width: 10px;
+    height: 6px;
+    stroke-width: 2px;
+    stroke: #9098a9;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  .select select {
+    -webkit-appearance: none;
+    padding: 7px 40px 7px 12px;
+    width: 70%;
+    border: 0px none #e8eaed;
+    border-radius: 100px;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    transition: all 150ms ease;
+  }
+  .select select:required:invalid {
+    color: #5a667f;
+  }
+  .select select option {
+    color: #223254;
+  }
+  .select select option[value=""][disabled] {
+    display: none;
+  }
+  .select select:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 0 2px white;
+  }
+  .select select:hover + svg {
+    stroke: #07f;
+  }
+
+  #slctnode{
+      border: 1px solid black;
+      width:50%;
+      border-color:#000;
+  }
+  #slctaction{
+    border: 1px solid black;
+    width:50%;
+    border-color:#000;
+    display:inline-block;
+}
+  .sprites {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    -webkit-animation-name: fadeIn; /* Fade in the background */
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: fixed;
+    bottom: 0;
+    background-color: #fefefe;
+    width: 100%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s
+  }
+  
+  /* The Close Button */
+  .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+  }
+  
+  .modal-body {padding: 2px 16px;}
+  
+  .modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+    cursor:pointer;
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes slideIn {
+    from {bottom: -300px; opacity: 0} 
+    to {bottom: 0; opacity: 1}
+  }
+  
+  @keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+  }
+  
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+  }

@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ESP-NOW DASHBOARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="topnav">
+        <h4 class="dashead">Dashboard</h4>
+        <span class="username">Welcome, Mr. Kenny!</span>
+    </div>
+    <div class="half-circle">
+        
+<label class="select" for="slct">
+    <select id="slct" required="required">
+      <option value="" disabled="disabled" selected="selected">Select option</option>
+      <option value="#">Room 1</option>
+      <option value="#">Room 2</option>
+    </select>
+    <svg>
+      <use xlink:href="#select-arrow-down"></use>
+    </svg>
+  </label>
+  <!-- SVG Sprites-->
+  <svg class="sprites">
+    <symbol id="select-arrow-down" viewbox="0 0 10 6">
+      <polyline points="1 1 5 5 9 1"></polyline>
+    </symbol>
+  </svg>
+        </div>
+    <div class="content">
+        <div class="cards">
+            <div class="card boxcard">
+            <div class="card lights">
+                <h4><i class="fas fa-thermometer-half"></i>LIGHTS</h4>
+                <p><label class="switch">
+                    <input id="toggleSwitches1" onchange="toggleS1()" type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
+            </p>
+            <h4 id="12g" ><i class="fas fa-thermometer-half"></i>OFF</h4>
+                <p class="packet">nodeID: 12g<span id="rt1"></span></p>
+            </div>
+            <div class="card fan">
+                <h4><i class="fas fa-thermometer-half"></i>FAN</h4>
+                <p><label class="switch">
+                    <input id="toggleSwitches2" onchange="toggleS2()" type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
+            </p>
+            <h4 id="12u"><i class="fas fa-thermometer-half"></i>OFF</h4>
+                <p class="packet">nodeID: 12u<span id="rt1"></span></p>
+            </div>
+            <div class="card temperature">
+                <h4><i class="fas fa-thermometer-half"></i>TEMPERATURE</h4>
+                <p><span class="reading"><span id="t1"></span> &deg;C</span></p>
+                <p class="packet">DHT-11<span id="rt1"></span></p>
+            </div>
+            <div class="card humidity">
+                <h4><i class="fas fa-tint"></i>HUMIDITY</h4>
+                <p><span class="reading"><span id="h1"></span> &percnt;</span></p>
+                <p class="packet">DHT-11<span id="rh1"></span></p>
+            </div>
+            <div id="myBtn" class="card alarm">
+                <h4><i class="fas fa-tint"></i>+ Create New Alarm</h4>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2>Set Alarm</h2>
+        </div>
+        <div class="modal-body">
+          <p>Please fill in the Details for the Action</p>
+          <label class="select" for="slctnode">
+            <select id="slctnode" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Node</option>
+              <option value="12g">Light</option>
+              <option value="12u">Fan</option>
+            </select>
+            <svg>
+              <use xlink:href="#select-arrow-down"></use>
+            </svg>
+          </label><br/><br/>
+          <label class="select" for="slctaction">
+            <select id="slctaction" required="required">
+              <option value="" disabled="disabled" selected="selected">Select Action</option>
+              <option value="ON">Switch ON</option>
+              <option value="OFF">Switch OFF</option>
+            </select>
+            <svg>
+              <use xlink:href="#select-arrow-down"></use>
+            </svg>
+          </label><br/><br/>
+          <input type="datetime-local" id="alarmTime" name="alarmTime"><br/><br/>
+        </div>
+        <div onclick="alarmSend()" class="modal-footer">
+          <h3>Send to Server</h3>
+        </div>
+    </div>
+    <script>
+        function readUpdate(){
+			const http = new XMLHttpRequest();
+            const http1 = new XMLHttpRequest();
+            const http2 = new XMLHttpRequest();
+            const light='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=12g';
+            const fan='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=12u';
+            const sensor='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=sen1';
+            console.log(sensor);
+            http.open("GET", sensor);
+            http.send();
+
+            http.onreadystatechange = (e) => {
+					let response = JSON.parse(http.responseText);
+					console.log('value sen1:'+response.value);
+					document.getElementById("t1").innerHTML=response.value;
+
+				}
+            http1.open("GET", light);
+            http1.send();
+
+            http1.onreadystatechange = (e) => {
+					let response = JSON.parse(http1.responseText);
+					console.log(response.nodeID+response.action);
+					if(response.action=="ON" && document.getElementById("12g").textContent=="OFF")
+                        document.getElementById("toggleSwitches1").click();
+                    else if(response.action=="OFF" && document.getElementById("12g").textContent=="ON")
+                    document.getElementById("toggleSwitches1").click();
+				}
+            http2.open("GET", fan);
+            http2.send();
+
+            http2.onreadystatechange = (e) => {
+					let response = JSON.parse(http2.responseText);
+					console.log(response.nodeID+response.action);
+					if(response.action=="ON" && document.getElementById("12u").textContent=="OFF")
+                        document.getElementById("toggleSwitches2").click();
+                    else if(response.action=="OFF" && document.getElementById("12u").textContent=="ON")
+                    document.getElementById("toggleSwitches2").click();
+
+				}
+		
+
+    		setTimeout(readUpdate, 5000);
+		}
+
+		readUpdate();
+
+        function sendRequest(gateway,node,action){
+            const Http = new XMLHttpRequest();
+            const url='http://localhost:4000/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
+            console.log(url);
+            Http.open("GET", url);
+            Http.send();
+
+            Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+            }
+        }
+        function toggleS1(){
+            var btn=document.getElementById("toggleSwitches1");
+            
+            if(!btn.hasAttribute('checked')){
+                btn.setAttribute('checked','');
+                document.getElementById("12g").innerHTML = 'ON';
+                sendRequest("2111","12g","ON");
+            }
+            else{
+                btn.removeAttribute('checked')
+                document.getElementById("12g").innerHTML = 'OFF';
+                sendRequest("2111","12g","OFF");
+            }
+                
+            console.log("S1:"+btn.hasAttribute('checked'));
+
+        }
+
+        function toggleS2(){
+            var btn=document.getElementById("toggleSwitches2");
+            
+            if(!btn.hasAttribute('checked')){
+                btn.setAttribute('checked','');
+                document.getElementById("12u").innerHTML = 'ON';
+                sendRequest("2111","12u","ON");
+            }
+            else{
+                btn.removeAttribute('checked')
+                document.getElementById("12u").innerHTML = 'OFF';
+                sendRequest("2111","12u","OFF");
+            }
+            console.log("S2:"+btn.hasAttribute('checked'));
+        }
+
+        var modal = document.getElementById("myModal");
+
+        var btn = document.getElementById("myBtn");
+
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        } 
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            }
+        }
+
+        function alarmSend(){
+            var node = document.getElementById("slctnode").value;
+            var action = document.getElementById("slctaction").value;
+            var alarmTime = document.getElementById("alarmTime").value;
+            const Http = new XMLHttpRequest();
+            const url='http://localhost:4000/api/controls/alarm?gateway=2111&node='+node+'&action='+action+'&time='+alarmTime;
+            console.log(url);
+            Http.open("GET", url);
+            Http.send();
+
+            Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+            }
+        }
+    </script>
+</body>
+
+</html>

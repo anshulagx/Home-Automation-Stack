@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 const express = require("express")
 var mqtt = require('mqtt')
 require('dotenv').config()
+var moment = require('moment')
 
 
 //var UserModel = require('../../models/alarms.js')
@@ -52,8 +53,6 @@ client.on('connect', function() {
 }
 //TODO: MAKE IT VARIABLE
 mqttSub("2111");
-mqttSub("2011");
-mqttSub("2001");
 
   function connectToDB() {
     //Set up mongoose connection
@@ -94,6 +93,17 @@ router.get("/publish", (req, res) => {
   mongoWrite(req.query.gateway,req.query.node,req.query.action);
   res.status(200).send("Success");
 });
+
+router.get("/alarm", (req,res) => {
+  console.log("Setting Alarm");
+  var now = moment();
+  var alarmTime = moment(req.query.time.toString(), moment.HTML5_FMT.DATETIME_LOCAL);//req.body.time
+  var time = parseInt(moment.duration(alarmTime.diff(now)).asSeconds())
+  console.log(time)
+  setTimeout(function () {
+    mqttPub(req.query.gateway, req.query.node+'/'+req.query.action+'//');
+  }, time*1000)
+})
 
 router.get("/read", (req,res) => {
   // gatewayID, nodeID
