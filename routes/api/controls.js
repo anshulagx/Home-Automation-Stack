@@ -107,7 +107,7 @@ router.get("/alarm", (req,res) => {
   }, time*1000)
 })
 router.get("/lastAction", (req,res) => {
-  StatesModel.find().sort({"timestamp": 1}).limit(1).exec((err, entry) => {
+  StatesModel.find().sort({"timestamp": -1}).limit(1).exec((err, entry) => {
     if (err) {
       console.log(err);
       return res.status(500).send(err)
