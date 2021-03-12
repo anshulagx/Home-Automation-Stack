@@ -77,7 +77,8 @@ function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
     "nodeID":nodeID,
     "value":value,
     "action":action,
-    "extras":extras
+    "extras":extras,
+    "timestamp":new Date()
   };
 
   var state = new StatesModel(data);
@@ -120,7 +121,7 @@ router.get("/read", (req,res) => {
 
   var gatewayId=req.query.gatewayId;
   var nodeId=req.query.nodeId;
-  console.log("Searching");
+  
   StatesModel
   .find({
     gatewayID: gatewayId,
