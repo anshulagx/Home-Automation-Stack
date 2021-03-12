@@ -1,8 +1,17 @@
 const express = require('express')
+const admin = require("firebase-admin");
+const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
 
 const profile = require('./routes/api/controls')
+const serviceAccount = require("./serviceAccountKey.json");
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://ecdc-rookie.firebaseapp.com",
+});
 
+const csrfMiddleware = csrf({ cookie: true });
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express()
@@ -34,9 +43,62 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.engine("html", require("ejs").renderFile);
+app.use(express.static("static"));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(csrfMiddleware);
+
+app.all("*", (req, res, next) => {
+  res.cookie("XSRF-TOKEN", req.csrfToken());
+  next();
+});
+app.get("/login", function (req, res) {
+  res.render(path.join(__dirname+'/views/login.html'));
+});
+
+app.get("/signup", function (req, res) {
+  res.render(path.join(__dirname+'/views/signup.html'));
+});
+
 app.use("/api/controls", profile)
 app.get('/',function(req,res) {
-    res.sendFile(path.join(__dirname+'/views/index.html'));
+  const sessionCookie = req.cookies.session || "";
+
+  admin
+    .auth()
+    .verifySessionCookie(sessionCookie, true /** checkRevoked */)
+    .then(() => {
+      res.render(path.join(__dirname+'/views/index.html'));
+    })
+    .catch((error) => {
+      res.redirect("/login");
+    });
+  });
+
+  app.post("/sessionLogin", (req, res) => {
+    const idToken = req.body.idToken.toString();
+  
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
+  
+    admin
+      .auth()
+      .createSessionCookie(idToken, { expiresIn })
+      .then(
+        (sessionCookie) => {
+          const options = { maxAge: expiresIn, httpOnly: true };
+          res.cookie("session", sessionCookie, options);
+          res.end(JSON.stringify({ status: "success" }));
+        },
+        (error) => {
+          res.status(401).send("UNAUTHORIZED REQUEST!");
+        }
+      );
+  });
+
+  app.get("/sessionLogout", (req, res) => {
+    res.clearCookie("session");
+    res.redirect("/login");
   });
 
   app.get('/style.css', function(req, res) {

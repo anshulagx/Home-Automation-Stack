@@ -1,5 +1,5 @@
 # Config file
 .env
-
+serviceAccountKey.json
 # Node stuff
 node_modules
