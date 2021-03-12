@@ -37,6 +37,7 @@
         <div class="cards">
             <div class="card boxcard">
                 <h2 class="currTime">Current Time: <span id="timeMe"></span></h2>
+                <h3 class="currTime">Last User Action: <span id="lastAction"></span></h2>
             <div class="card lights">
                 <h4><i class="fas fa-thermometer-half"></i>LIGHTS</h4>
                 <p><label class="switch">
@@ -121,9 +122,11 @@
 			const http = new XMLHttpRequest();
             const http1 = new XMLHttpRequest();
             const http2 = new XMLHttpRequest();
+            const lastActionHTTP = new XMLHttpRequest();
             const light='/api/controls/read?gatewayId=2111&nodeId=12g';
             const fan='/api/controls/read?gatewayId=2111&nodeId=12u';
             const sensor='/api/controls/read?gatewayId=2111&nodeId=sen1';
+            const lastAction = '/api/controls/lastAction';
             console.log(sensor);
             http.open("GET", sensor);
             http.send();
@@ -156,9 +159,16 @@
                     else if(response.action=="OFF" && document.getElementById("12u").textContent=="ON")
                     document.getElementById("toggleSwitches2").click();
 
+                    
 				}
-		
+                lastActionHTTP.open("GET", lastAction);
+            lastActionHTTP.send();
 
+            lastActionHTTP.onreadystatechange = (e) => {
+					let response = JSON.parse(lastActionHTTP.responseText);
+					console.log(response);
+
+				}
     		setTimeout(readUpdate, 5000);
 		}
 
