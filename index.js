@@ -39,6 +39,10 @@ app.get('/',function(req,res) {
     res.sendFile(path.join(__dirname+'/views/index.html'));
   });
 
+  app.get('/style.css', function(req, res) {
+    res.sendFile(__dirname + "/views/" + "style.css");
+  });
+
 //For all unmatched routes
 app.use((req, res) => {
     res.status(400).json("Invalid API request");
