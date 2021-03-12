@@ -168,7 +168,7 @@
 					let response = JSON.parse(lastActionHTTP.responseText);
 					let dev = response.nodeID=='12g'?"Light":"Fan";
                     let time = new Date(response.timestamp).toLocaleString("en-US", {timeZone: "Asia/Kolkata"})
-                    let str = "Turned "+reponse.action.lower()+" "+dev+" at "+time
+                    let str = "Turned "+response.action.lower()+" "+dev+" at "+time
                     document.getElementById("lastAction").innerHTML = str;
 
 				}
