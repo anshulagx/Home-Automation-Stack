@@ -90,8 +90,8 @@ function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
 router.get("/publish", (req, res) => {
  
   console.log("Initiating Message Publish");
-  mqttPub(req.query.gateway,req.query.node+"/"+req.query.action+"/"+req.query.value+"/"+request.query.extras)
-  mongoWrite(req.query.gateway,req.query.node,req.query.action,req.query.value,request.query.extras);
+  mqttPub(req.query.gateway,req.query.node+"/"+req.query.action+"/"+req.query.value+"/"+req.query.extras)
+  mongoWrite(req.query.gateway,req.query.node,req.query.action,req.query.value,req.query.extras);
   res.status(200).send("Success");
 });
 
