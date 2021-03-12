@@ -6,15 +6,16 @@ var moment = require('moment')
 
 
 //var UserModel = require('../../models/alarms.js')
-var StatesModel = require('../../models/states.js')
+var StatesModel = require('../../models/states.js');
+const { request } = require('express');
 
 
 var options = {
-  port: 1883,
-  host: 'mqtt://65.1.164.121',
+  port: process.env.MQTT_PORT,
+  host: process.env.MQTT_HOST,
   clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
-  username: 'teamrookie',
-  password: 'benrowonahack',
+  username: process.env.MQTT_USER,
+  password: process.env.MQTT_PASS,
   keepalive: 60,
   reconnectPeriod: 1000,
   protocolId: 'MQIsdp',
@@ -24,7 +25,7 @@ var options = {
 };
 
 function mqttPub(topic, msg){
-  var client  = mqtt.connect('mqtt://65.1.164.121',options)
+  var client  = mqtt.connect(process.env.MQTT_HOST,options)
     client.on('connect', function() {
       console.log('connected');
       client.publish(topic, msg, function() {
@@ -36,7 +37,7 @@ function mqttPub(topic, msg){
 }
 
 function mqttSub(gatewayID){
-  var client = mqtt.connect('mqtt://65.1.164.121', options);
+  var client = mqtt.connect(process.env.MQTT_HOST, options);
 client.on('connect', function() {
     console.log('connected');
     client.subscribe(gatewayID, function() {
@@ -89,15 +90,15 @@ function mongoWrite(gatewayID, nodeID, action, value=0, extras=""){
 router.get("/publish", (req, res) => {
  
   console.log("Initiating Message Publish");
-  mqttPub(req.query.gateway,req.query.node+"/"+req.query.action)
-  mongoWrite(req.query.gateway,req.query.node,req.query.action);
+  mqttPub(req.query.gateway,req.query.node+"/"+req.query.action+"/"+req.query.value+"/"+request.query.extras)
+  mongoWrite(req.query.gateway,req.query.node,req.query.action,req.query.value,request.query.extras);
   res.status(200).send("Success");
 });
 
 router.get("/alarm", (req,res) => {
   console.log("Setting Alarm");
   var now = moment();
-  var alarmTime = moment(req.query.time.toString(), moment.HTML5_FMT.DATETIME_LOCAL);//req.body.time
+  var alarmTime = moment(req.query.time.toString(), moment.HTML5_FMT.DATETIME_LOCAL);
   var time = parseInt(moment.duration(alarmTime.diff(now)).asSeconds())
   console.log(time)
   setTimeout(function () {

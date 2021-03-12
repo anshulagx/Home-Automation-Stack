@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>ESP-NOW DASHBOARD</title>
+    <title>Rookie Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
@@ -108,6 +108,9 @@
         </div>
     </div>
     <script>
+        if (location.protocol !== 'https:' && location.hostname=='controlhome.herokuapp.com') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
         function setDate(){
             var date = new Date();
             document.getElementById("timeMe").innerHTML = date.toString().slice(0,24);
@@ -163,7 +166,7 @@
 
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
-            const url='/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
+            const url='/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action+'&value=0&extras=0';
             console.log(url);
             Http.open("GET", url);
             Http.send();
