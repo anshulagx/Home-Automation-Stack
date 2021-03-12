@@ -169,6 +169,7 @@
 					let dev = response.nodeID=='12g'?"Light":"Fan";
                     let time = new Date(response.timestamp).toLocaleString("en-US", {timeZone: "Asia/Kolkata"})
                     let str = "Turned "+reponse.action.lower()+" "+dev+" at "+time
+                    document.getElementById("lastAction").innerHTML = str;
 
 				}
     		setTimeout(readUpdate, 5000);
