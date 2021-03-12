@@ -118,9 +118,9 @@
 			const http = new XMLHttpRequest();
             const http1 = new XMLHttpRequest();
             const http2 = new XMLHttpRequest();
-            const light='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=12g';
-            const fan='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=12u';
-            const sensor='http://localhost:4000/api/controls/read?gatewayId=2111&nodeId=sen1';
+            const light='/api/controls/read?gatewayId=2111&nodeId=12g';
+            const fan='/api/controls/read?gatewayId=2111&nodeId=12u';
+            const sensor='/api/controls/read?gatewayId=2111&nodeId=sen1';
             console.log(sensor);
             http.open("GET", sensor);
             http.send();
@@ -163,7 +163,7 @@
 
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
-            const url='http://localhost:4000/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
+            const url='/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action;
             console.log(url);
             Http.open("GET", url);
             Http.send();
@@ -231,7 +231,7 @@
             var action = document.getElementById("slctaction").value;
             var alarmTime = document.getElementById("alarmTime").value;
             const Http = new XMLHttpRequest();
-            const url='http://localhost:4000/api/controls/alarm?gateway=2111&node='+node+'&action='+action+'&time='+alarmTime;
+            const url='/api/controls/alarm?gateway=2111&node='+node+'&action='+action+'&time='+alarmTime;
             console.log(url);
             Http.open("GET", url);
             Http.send();
