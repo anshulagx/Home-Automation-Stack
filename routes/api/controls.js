@@ -105,6 +105,15 @@ router.get("/alarm", (req,res) => {
     mqttPub(req.query.gateway, req.query.node+'/'+req.query.action+'//');
   }, time*1000)
 })
+router.get("/lastAction", (req,res) => {
+  StatesModel.find().sort({"timestamp": 1}).limit(1).exec((err, entry) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err)
+    }
+    return res.status(200).send(entry);
+  });;
+});
 
 router.get("/read", (req,res) => {
   // gatewayID, nodeID
