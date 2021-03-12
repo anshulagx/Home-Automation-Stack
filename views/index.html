@@ -123,10 +123,10 @@
             const http1 = new XMLHttpRequest();
             const http2 = new XMLHttpRequest();
             const lastActionHTTP = new XMLHttpRequest();
-            const light='/api/controls/read?gatewayId=2111&nodeId=12g';
-            const fan='/api/controls/read?gatewayId=2111&nodeId=12u';
-            const sensor='/api/controls/read?gatewayId=2111&nodeId=sen1';
-            const lastAction = '/api/controls/lastAction';
+            const light='https://controlhome.herokuapp.com/api/controls/read?gatewayId=2111&nodeId=12g';
+            const fan='https://controlhome.herokuapp.com/api/controls/read?gatewayId=2111&nodeId=12u';
+            const sensor='https://controlhome.herokuapp.com/api/controls/read?gatewayId=2111&nodeId=sen1';
+            const lastAction = 'https://controlhome.herokuapp.com/api/controls/lastAction';
             console.log(sensor);
             http.open("GET", sensor);
             http.send();
@@ -165,10 +165,10 @@
             lastActionHTTP.send();
 
             lastActionHTTP.onreadystatechange = (e) => {
-					let response = JSON.parse(lastActionHTTP.responseText);
+					let response = JSON.parse(lastActionHTTP.responseText)[0];
 					let dev = response.nodeID=='12g'?"Light":"Fan";
                     let time = new Date(response.timestamp).toLocaleString("en-US", {timeZone: "Asia/Kolkata"})
-                    let str = "Turned "+response.action.lower()+" "+dev+" at "+time
+                    let str = "Turned "+response.action.toLowerCase()+" "+dev+" at "+time
                     document.getElementById("lastAction").innerHTML = str;
 
 				}
@@ -179,7 +179,7 @@
 
         function sendRequest(gateway,node,action){
             const Http = new XMLHttpRequest();
-            const url='/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action+'&value=0&extras=0';
+            const url='https://controlhome.herokuapp.com/api/controls/publish?gateway='+gateway+'&node='+node+'&action='+action+'&value=0&extras=0';
             console.log(url);
             Http.open("GET", url);
             Http.send();
@@ -247,7 +247,7 @@
             var action = document.getElementById("slctaction").value;
             var alarmTime = document.getElementById("alarmTime").value;
             const Http = new XMLHttpRequest();
-            const url='/api/controls/alarm?gateway=2111&node='+node+'&action='+action+'&time='+alarmTime;
+            const url='https://controlhome.herokuapp.com/api/controls/alarm?gateway=2111&node='+node+'&action='+action+'&time='+alarmTime;
             console.log(url);
             Http.open("GET", url);
             Http.send();
