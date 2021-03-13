@@ -123,9 +123,11 @@
             const http1 = new XMLHttpRequest();
             const http2 = new XMLHttpRequest();
             const lastActionHTTP = new XMLHttpRequest();
+            const sensor2HTTP = new XMLHttpRequest();
             const light='/api/controls/read?gatewayId=2111&nodeId=12g';
             const fan='/api/controls/read?gatewayId=2111&nodeId=12u';
             const sensor='/api/controls/read?gatewayId=2111&nodeId=sen1';
+            const sensor2='/api/controls/read?gatewayId=2111&nodeId=sen2';
             const lastAction = '/api/controls/lastAction';
             console.log(sensor);
             http.open("GET", sensor);
@@ -135,6 +137,14 @@
 					let response = JSON.parse(http.responseText);
 					console.log('value sen1:'+response.value);
 					document.getElementById("t1").innerHTML=response.value;
+				}
+            sensor2HTTP.open("GET", sensor2);
+            sensor2HTTP.send();
+
+            sensor2HTTP.onreadystatechange = (e) => {
+					let response = JSON.parse(sensor2HTTP.responseText);
+					console.log('value sen2:'+response.value);
+					document.getElementById("h1").innerHTML=response.value;
 
 				}
             http1.open("GET", light);
