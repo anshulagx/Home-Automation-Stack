@@ -2,7 +2,7 @@
 
 ## Frontend and Backend for the Home Automation System developed for the Techkriti ECDC-2021.
 
-![Frontend Site](https://github.com/anshulagx/Home-Automation-Stack/blob/main/views/Screenshot%202021-03-17%20at%2010.26.40%20AM.png?raw=true)
+![Frontend Site](https://github.com/anshulagx/Home-Automation-Stack/blob/main/views/ui.png?raw=true)
 
 ### Features
 * Responsive and Attractive UI
